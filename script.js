@@ -52,6 +52,10 @@ function addLine(lines, p1, p2) {
   lines.set(hashPoints(p1,p2), [p1, p2]);
 }
 
+function removeLine(lines, p1, p2) {
+  lines.delete(hashPoints(p1,p2));
+}
+
 function drawPoints(points) {
   for (let i = 0; i < points.length; i++) {
     // Draw Point (white)
@@ -177,12 +181,23 @@ async function run() {
 
   drawPoints(points);
 
+  // draw Lines
   for (let i = 0; i < points.length - 1; i++) {
     addLine(lines, points[i], points[i + 1]);
 
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 100));
     draw(points, lines);
   }
+
+  // Erase Lines
+  for (let i = 0; i < points.length - 1; i++) {
+    removeLine(lines, points[i], points[i + 1]);
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    draw(points, lines);
+  }
+
+
 }
 
 // setTimeout(() => {
