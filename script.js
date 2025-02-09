@@ -83,7 +83,7 @@ function drawLines(lines) {
   }
 }
 
-function drawLine(line, color = "red", width = "4") {
+function drawLine(line, color = "blue", width = "4") {
   ctx.beginPath();
   ctx.moveTo(line[0][0], line[0][1]);
   ctx.lineTo(line[1][0], line[1][1]);
@@ -155,7 +155,7 @@ function grahamScan(points) {
   const bottomPoint = points[bottomIdx];
 
   // Mark the point
-  drawPoint(bottomPoint, "white");
+  drawPoint(bottomPoint, "red");
 
   // Remove point from original array O(N)
   points.splice(bottomIdx, 1);
@@ -173,15 +173,8 @@ function grahamScan(points) {
 }
 function chenAlgorithm(points) {}
 
-async function run() {
-  // Testing Drawing
-  const points = get2dPoints(50);
-
-  const lines = new Map();
-
-  drawPoints(points);
-
-  // draw Lines
+async function drawAndErase(points, lines){
+      // draw Lines
   for (let i = 0; i < points.length - 1; i++) {
     addLine(lines, points[i], points[i + 1]);
 
@@ -196,6 +189,19 @@ async function run() {
     await new Promise((resolve) => setTimeout(resolve, 100));
     draw(points, lines);
   }
+}
+
+async function run() {
+  // Testing Drawing
+  const points = get2dPoints(50);
+
+  const lines = new Map();
+
+  drawPoints(points);
+
+//   drawAndErase(points, lines);
+
+    
 
 
 }
