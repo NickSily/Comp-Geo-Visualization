@@ -19,10 +19,4 @@ canvas {
     background-color: black;
     border: 1px solid white;
 }
-#pointCanvas{
-    z-index: 1;
-}
-#lineCanvas{
-    z-index: 2;
-    background-color: transparent;
-}
+

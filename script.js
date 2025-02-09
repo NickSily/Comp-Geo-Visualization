@@ -5,8 +5,10 @@ import axios from "https://esm.sh/axios";
 const myCanvas = document.getElementById("myCanvas");
 
 // Setup Canvas
-myCanvas.width = window.innerWidth;
-myCanvas.height = window.innerHeight;
+const width = window.innerWidth;
+myCanvas.width = width;
+const height = window.innerHeight;
+myCanvas.height = height;
 
 /** @type {CanvasRenderingContext2D} */
 const ctx = myCanvas.getContext("2d");
@@ -27,6 +29,21 @@ function get2dPoints(n) {
   }
 
   return result;
+}
+
+function draw(points, lines) {
+  clear();
+  drawPoints(points);
+  drawLines(lines);
+}
+
+function clear() {
+  // clears the canvas
+  ctx.clearRect(0, 0, width, height);
+}
+
+function addLine(lines, p1, p2) {
+  lines.push([p1, p2]);
 }
 
 function drawPoints(points) {
@@ -50,23 +67,19 @@ function clearPoint(point, color = "black", radius = "5") {
   ctx.fill();
 }
 
-function drawLine(p1, p2, color = "red", width = "4") {
+function drawLines(lines) {
+  for (let i = 0; i < lines.length; i++) {
+    drawLine(lines[i]);
+  }
+}
+
+function drawLine(line, color = "red", width = "4") {
   ctx.beginPath();
-  ctx.moveTo(p1[0], p1[1]);
-  ctx.lineTo(p2[0], p2[1]);
+  ctx.moveTo(line[0][0], line[0][1]);
+  ctx.lineTo(line[1][0], line[1][1]);
   ctx.strokeStyle = color;
   ctx.lineWidth = width;
   ctx.stroke();
-}
-
-function clearLine(p1, p2, color = "black", width = "5") {
-  ctx.globalCompositeOperation = "destination-out"; // Set mode to erase
-  ctx.beginPath();
-  ctx.moveTo(p1[0], p1[1]);
-  ctx.lineTo(p2[0], p2[1]);
-  ctx.lineWidth = width; // Slightly larger to fully erase the previous line
-  ctx.stroke();
-  ctx.globalCompositeOperation = "source-over"; // Restore default mode
 }
 
 function convexHull(points, algorithm = jarvisMarch) {
@@ -150,47 +163,25 @@ function grahamScan(points) {
 }
 function chenAlgorithm(points) {}
 
-async function drawLines(numbers) {
-  for (let i = 0; i < numbers.length - 1; i++) {
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        const p1 = numbers[i];
-        const p2 = numbers[i + 1];
-        drawLine(p1, p2, "white", "2");
-        resolve();
-      }, 250);
-    });
-  }
-}
-
-async function clearLines(numbers) {
-  for (let i = 0; i < numbers.length - 1; i++) {
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        const p1 = numbers[i];
-        const p2 = numbers[i + 1];
-        clearLine(p1, p2);
-        resolve();
-      }, 500);
-    });
-  }
-}
-
 async function run() {
   // Testing Drawing
-  const numbers = get2dPoints(50);
+  const points = get2dPoints(50);
 
-  drawPoints(numbers);
+  const lines = [];
 
-  // Connect Points
-  await drawLines(numbers);
+  drawPoints(points);
 
-  await clearLines(numbers);
+  for (let i = 0; i < points.length - 1; i++) {
+    lines.push([points[i], points[i + 1]]);
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    draw(points, lines);
+  }
 }
 
-setTimeout(() => {
-  console.log("okay let's begin");
-  run();
-}, 1000);
+// setTimeout(() => {
+//   console.log("okay let's begin");
+//   run();
+// }, 1000);
 
 run();
