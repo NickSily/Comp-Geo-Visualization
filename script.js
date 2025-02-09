@@ -42,9 +42,14 @@ function clear() {
   ctx.clearRect(0, 0, width, height);
 }
 
+function hashPoints(p1, p2) {
+  // Simple hash function combining the four integer values
+  const hash = (p1[0] * 31 + p1[1]) * 31 + p2[0] * 31 + p2[1];
+  return hash;
+}
+
 function addLine(lines, p1, p2) {
-  const key = `${p1[0]},${p1[1]}-${p2[0]},${p2[1]}`;
-  lines.set(key, [p1, p2]);
+  lines.set(hashPoints(p1,p2), [p1, p2]);
 }
 
 function drawPoints(points) {
