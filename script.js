@@ -1,28 +1,22 @@
 "use strict";
 import axios from "https://esm.sh/axios";
 
-/** @type {HTMLCanvasElement[]} */
-const canvases = [
-  document.getElementById("pointCanvas"),
-  document.getElementById("lineCanvas"),
-];
+/** @type HTMLCanvasElement */
+const myCanvas = document.getElementById("myCanvas");
 
-/** @type {CanvasRenderingContext2D[]} */
-const contexts = [canvases[0].getContext("2d"), canvases[1].getContext("2d")];
+// Setup Canvas
+myCanvas.width = window.innerWidth;
+myCanvas.height = window.innerHeight;
 
-// Setup Canvases
-canvases.forEach((canvas) => {
-  // Adjust size to match window
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+/** @type {CanvasRenderingContext2D} */
+const ctx = myCanvas.getContext("2d");
 
 function get2dPoints(n) {
   let result = [];
 
-  const x0 = pointCanvas.width / 4;
+  const x0 = myCanvas.width / 4;
   const xSpan = x0 * 2;
-  const y0 = pointCanvas.height / 4;
+  const y0 = myCanvas.height / 4;
   const ySpan = y0 * 2;
 
   for (let i = 0; i < n; i++) {
@@ -43,36 +37,36 @@ function drawPoints(points) {
 }
 
 function drawPoint(point, color = "white", radius = "5") {
-  contexts[0].fillStyle = color;
-  contexts[0].beginPath();
-  contexts[0].arc(point[0], point[1], radius, 0, 2 * Math.PI);
-  contexts[0].fill();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(point[0], point[1], radius, 0, 2 * Math.PI);
+  ctx.fill();
 }
 
 function clearPoint(point, color = "black", radius = "5") {
-  contexts[0].fillStyle = color;
-  contexts[0].beginPath();
-  contexts[0].arc(point[0], point[1], radius, 0, 2 * Math.PI);
-  contexts[0].fill();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(point[0], point[1], radius, 0, 2 * Math.PI);
+  ctx.fill();
 }
 
 function drawLine(p1, p2, color = "red", width = "4") {
-  contexts[1].beginPath();
-  contexts[1].moveTo(p1[0], p1[1]);
-  contexts[1].lineTo(p2[0], p2[1]);
-  contexts[1].strokeStyle = color;
-  contexts[1].lineWidth = width;
-  contexts[1].stroke();
+  ctx.beginPath();
+  ctx.moveTo(p1[0], p1[1]);
+  ctx.lineTo(p2[0], p2[1]);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = width;
+  ctx.stroke();
 }
 
 function clearLine(p1, p2, color = "black", width = "5") {
-  contexts[1].globalCompositeOperation = "destination-out"; // Set mode to erase
-  contexts[1].beginPath();
-  contexts[1].moveTo(p1[0], p1[1]);
-  contexts[1].lineTo(p2[0], p2[1]);
-  contexts[1].lineWidth = width; // Slightly larger to fully erase the previous line
-  contexts[1].stroke();
-  contexts[1].globalCompositeOperation = "source-over"; // Restore default mode
+  ctx.globalCompositeOperation = "destination-out"; // Set mode to erase
+  ctx.beginPath();
+  ctx.moveTo(p1[0], p1[1]);
+  ctx.lineTo(p2[0], p2[1]);
+  ctx.lineWidth = width; // Slightly larger to fully erase the previous line
+  ctx.stroke();
+  ctx.globalCompositeOperation = "source-over"; // Restore default mode
 }
 
 function convexHull(points, algorithm = jarvisMarch) {
