@@ -43,7 +43,8 @@ function clear() {
 }
 
 function addLine(lines, p1, p2) {
-  lines.push([p1, p2]);
+  const key = `${p1[0]},${p1[1]}-${p2[0]},${p2[1]}`;
+  lines.set(key, [p1, p2]);
 }
 
 function drawPoints(points) {
@@ -68,8 +69,8 @@ function clearPoint(point, color = "black", radius = "5") {
 }
 
 function drawLines(lines) {
-  for (let i = 0; i < lines.length; i++) {
-    drawLine(lines[i]);
+  for (let line of lines.values()) {
+    drawLine(line);
   }
 }
 
@@ -167,12 +168,12 @@ async function run() {
   // Testing Drawing
   const points = get2dPoints(50);
 
-  const lines = [];
+  const lines = new Map();
 
   drawPoints(points);
 
   for (let i = 0; i < points.length - 1; i++) {
-    lines.push([points[i], points[i + 1]]);
+    addLine(lines, points[i], points[i + 1]);
 
     await new Promise((resolve) => setTimeout(resolve, 500));
     draw(points, lines);
