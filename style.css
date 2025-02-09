@@ -1,0 +1,28 @@
+body {
+    /*Use Flexbox to center*/
+    display: flex;
+    /*Center Horizontally*/
+    justify-content: center;
+    /*Center Vertically*/
+    align-items: center;
+    /*Heigh is 100 percent of the viewport height*/
+    height: 100vh;
+    /*Remove Default margins*/
+    margin: 0;
+    background-color: #f4f4f4;
+    position: relative;
+}
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+    border: 1px solid white;
+}
+#pointCanvas{
+    z-index: 1;
+}
+#lineCanvas{
+    z-index: 2;
+    background-color: transparent;
+}
